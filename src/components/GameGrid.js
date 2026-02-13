@@ -6,19 +6,20 @@ export function GameGrid({ size }) {
   const [currentPlayer, setCurrentPlayer] = useState("X");
   const [gameState, setGameState] = useState("Next player: X");
 
-  useEffect(() => {
-    if (checkForWinner(squares)) {
-      setGameState(checkForWinner(squares));
-    } else {
-      setGameState(`Next player: ${currentPlayer}`);
-    }
-  }, [currentPlayer]);
+  useEffect(() => {}, [currentPlayer]);
 
-  const onClick = useCallback(
-    (x, y) => {
-      if (squares[x][y].text !== "") return;
+  const onClick = (x, y) => {
+    if (squares[x][y].text !== "") return;
+    const updatedSquares = [...squares];
+    updatedSquares[x][y] = { ...updatedSquares[x][y], text: currentPlayer };
+    if (checkForWinner(updatedSquares)) {
+      setGameState(checkForWinner(updatedSquares));
+    } else {
       setCurrentPlayer((current) => {
-        return current === "X" ? "O" : "X";
+        const nextPlayer = current === "X" ? "O" : "X";
+        setGameState(`Next player: ${nextPlayer}`);
+
+        return nextPlayer;
       });
       setSquares((prev) => {
         const newSquares = [...prev];
@@ -28,9 +29,8 @@ export function GameGrid({ size }) {
         };
         return newSquares;
       });
-    },
-    [squares],
-  );
+    }
+  };
 
   return (
     <div>
@@ -50,7 +50,7 @@ export function GameGrid({ size }) {
         ))}
       </div>
       <div>{gameState}</div>
-      <button onClick={() => setSquaressetInitialSquareState((size = size))}>
+      <button onClick={() => setSquares(setInitialSquareState((size = size)))}>
         Reset
       </button>
     </div>

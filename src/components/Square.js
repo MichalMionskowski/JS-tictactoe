@@ -1,6 +1,6 @@
 export default function Square({ text, x, y, onClick }) {
   return (
-    <div style={styles.square} onClick={() => onClick(x, y)}>
+    <div style={styles.square} className="square" onClick={() => onClick(x, y)}>
       {text}
     </div>
   );
